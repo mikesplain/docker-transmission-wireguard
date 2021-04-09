@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM alpine:3.12 as base
+FROM --platform=$TARGETPLATFORM alpine:3.13 as base
 
 LABEL maintainer "Vidur Butalia <vidurbutalia@gmail.com>"
 LABEL org.label-schema.url=https://github.com/vidurb/docker-wireguard-transmission
@@ -66,10 +66,10 @@ RUN tar xzvf ${S6_FILENAME} \
     && rmdir /combustion-release  \
     && adduser --home /config --shell /bin/false --disabled-password twg_user \
     && sed -i '/net.ipv4.conf.all.src_valid_mark=1/d' /usr/bin/wg-quick \
-    && wget https://github.com/pia-foss/manual-connections/archive/v1.0.0.zip \
-    && unzip /v1.0.0.zip \
-    && mv manual-connections-1.0.0 /etc/pia \
-    && rm -rf /v1.0.0.zip \
+    && wget https://github.com/pia-foss/manual-connections/archive/v2.0.0.zip \
+    && unzip /v2.0.0.zip \
+    && mv manual-connections-2.0.0 /etc/pia \
+    && rm -rf /v2.0.0.zip \
     && sed -i 's/sysctl -n net.ipv6.conf.all.disable_ipv6/echo 1/g' /etc/pia/connect_to_wireguard_with_token.sh \
     && sed -i 's/echo \"\$bind_port_response\"$/echo \"\$bind_port_response\"\n\n    transmission-remote -p ${port}/g' /etc/pia/port_forwarding.sh
 
