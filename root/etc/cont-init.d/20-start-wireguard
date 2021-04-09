@@ -2,22 +2,33 @@
 # shellcheck shell=sh
 # Copied from the entrypoint in upstream image (sebdanielsson/docker-wireguard-transmission)
 
-# check for wireguard config, then start wireguard
-if [ ! -f /etc/wireguard/"$INTERFACE".conf ]
-then
-  echo "Could not find /etc/wireguard/$INTERFACE.conf"
-  exit 1
-fi
+# To fix issue with using local ca.rsa.4096.crt
+cd /etc/pia
+./get_region_and_token.sh&
 
-if [ -f /etc/wireguard/"$INTERFACE".conf ]
-then
-    chmod 600 /etc/wireguard/"$INTERFACE".conf
-    if ! wg-quick up "$INTERFACE";
-    then
-      echo "
-      wg-quick was unable to create the interface. 
-      Please see the logs above
-      "
-      exit 1
-    fi
-fi
+eval $(/sbin/ip route list match 0.0.0.0 | awk '{if($5!="tun0"){print "GW="$3"\nINT="$5; exit}}')
+
+/sbin/ip route add "${LOCAL_NETWORK}" via "${GW}" dev "${INT}"
+# ip route add 10.0.0.0/16 via 172.17.0.1 dev eth0
+# add port dump to pia script
+# transmission-remote -p 53577
+
+# check for wireguard config, then start wireguard
+# if [ ! -f /etc/wireguard/"$INTERFACE".conf ]
+# then
+#   echo "Could not find /etc/wireguard/$INTERFACE.conf"
+#   exit 1
+# fi
+
+# if [ -f /etc/wireguard/"$INTERFACE".conf ]
+# then
+#     chmod 600 /etc/wireguard/"$INTERFACE".conf
+#     if ! wg-quick up "$INTERFACE";
+#     then
+#       echo "
+#       wg-quick was unable to create the interface.
+#       Please see the logs above
+#       "
+#       exit 1
+#     fi
+# fi

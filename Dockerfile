@@ -57,14 +57,22 @@ RUN tar xzvf ${S6_FILENAME} \
     && rm ${S6_FILENAME} \
     && tar -C /usr/local/bin -xzvf ${DOCKERIZE_FILENAME} \
     && rm ${DOCKERIZE_FILENAME} \
-    && apk add --no-cache --update wireguard-tools transmission-daemon unzip \
+    && apk add --no-cache --update wireguard-tools transmission-daemon unzip curl git wget jq procps transmission-cli \
     && rm -rf /usr/share/transmission/web/* \
     && unzip /release.zip \
     && ls /combustion-release \
     && mv /combustion-release/* /usr/share/transmission/web/ \
     && rm /release.zip \
     && rmdir /combustion-release  \
-    && adduser --home /config --shell /bin/false --disabled-password twg_user
+    && adduser --home /config --shell /bin/false --disabled-password twg_user \
+    && sed -i '/net.ipv4.conf.all.src_valid_mark=1/d' /usr/bin/wg-quick \
+    && wget https://github.com/pia-foss/manual-connections/archive/v1.0.0.zip \
+    && unzip /v1.0.0.zip \
+    && mv manual-connections-1.0.0 /etc/pia \
+    && rm -rf /v1.0.0.zip \
+    && sed -i 's/sysctl -n net.ipv6.conf.all.disable_ipv6/echo 1/g' /etc/pia/connect_to_wireguard_with_token.sh \
+    && sed -i 's/echo \"\$bind_port_response\"$/echo \"\$bind_port_response\"\n\n    transmission-remote -p ${port}/g' /etc/pia/port_forwarding.sh
+
 
 ADD https://raw.githubusercontent.com/SebDanielsson/dark-combustion/master/main.77f9cffc.css /usr/share/transmission/web/
 
@@ -145,8 +153,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     TRANSMISSION_WATCH_DIR_FORCE_GENERIC=false \
     PUID= \
     PGID= \
-    INTERFACE=wg0 \
+    INTERFACE=pia \
     KILLSWITCH= \
-    OVERWRITE_CONFIGURATION= 
+    OVERWRITE_CONFIGURATION=
 
 ENTRYPOINT ["/init"]
