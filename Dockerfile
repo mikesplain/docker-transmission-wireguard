@@ -1,8 +1,9 @@
 FROM --platform=$TARGETPLATFORM alpine:3.13 as base
 
-LABEL maintainer "Vidur Butalia <vidurbutalia@gmail.com>"
-LABEL org.label-schema.url=https://github.com/vidurb/docker-wireguard-transmission
-LABEL org.label-schema.name=wireguard-transmission
+LABEL maintainer "Mike Splain <mike.splain@gmail.com>"
+LABEL org.label-schema.url=https://github.com/mikesplain/docker-transmission-wireguard
+LABEL org.label-schema.name=transmission-wireguard
+LABEL org.opencontainers.image.source="https://github.com/mikesplain/docker-transmission-wireguard"
 
 ENV DOCKERIZE_VERSION=v0.6.1 \
     S6_VERSION=v2.1.0.2
