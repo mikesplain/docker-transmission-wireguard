@@ -4,7 +4,7 @@
 
 # To fix issue with using local ca.rsa.4096.crt
 cd /etc/pia
-./get_region_and_token.sh&
+./run_setup.sh&
 
 eval $(/sbin/ip route list match 0.0.0.0 | awk '{if($5!="tun0"){print "GW="$3"\nINT="$5; exit}}')
 
