@@ -1,0 +1,13 @@
+# shellcheck shell=sh
+
+RUN_AS=root
+if [ -n "$PUID" ] && [ ! "$(id -u root)" -eq "$PUID" ]; then
+  RUN_AS=twg_user;
+fi
+
+while :
+do
+  PORT=$(cat /etc/pia/port)
+  transmission-remote -p $PORT
+  sleep 30
+done

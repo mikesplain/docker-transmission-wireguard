@@ -72,8 +72,8 @@ RUN tar xzvf ${S6_FILENAME} \
     && mv manual-connections-2.0.0 /etc/pia \
     && rm -rf /v2.0.0.zip \
     && sed -i 's/sysctl -n net.ipv6.conf.all.disable_ipv6/echo 1/g' /etc/pia/connect_to_wireguard_with_token.sh \
-    && sed -i 's/echo \"\$bind_port_response\"$/echo \"\$bind_port_response\"\n\n    transmission-remote -p ${port}/g' /etc/pia/port_forwarding.sh
-
+    && sed -i 's/sleep 900/echo -n \$port > \/etc\/pia\/port \&\& sleep 900/g' /etc/pia/port_forwarding.sh \
+    && echo -n 9090 > /etc/pia/port
 
 ADD https://raw.githubusercontent.com/SebDanielsson/dark-combustion/master/main.77f9cffc.css /usr/share/transmission/web/
 
