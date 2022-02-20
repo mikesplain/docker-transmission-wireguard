@@ -2,12 +2,13 @@ name: build-develop
 
 on:
   push:
-    branches: 
+    branches:
       - wiregaurd_fixes
     paths-ignore:
       - "*.md"
   schedule:
     - cron: 20 4 * * 0
+  workflow_dispatch:
 
 jobs:
   build:
@@ -33,7 +34,7 @@ jobs:
       - name: Set outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        
+
       -
         name: Build and push
         uses: docker/build-push-action@v2
