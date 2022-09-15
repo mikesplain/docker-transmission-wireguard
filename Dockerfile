@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM alpine:3.14.1 as base
+FROM --platform=$TARGETPLATFORM alpine:3.16.2 as base
 
 LABEL maintainer "Mike Splain <mike.splain@gmail.com>"
 LABEL org.label-schema.url=https://github.com/mikesplain/docker-transmission-wireguard
