@@ -1,0 +1,23 @@
+{
+	"branchPrefix": "test-renovate/",
+	"dryRun": null,
+	"username": "private-renovatebot[bot]",
+	"gitAuthor": "Private Renovatebot <123456+private-renovatebot[bot]@users.noreply.github.com>",
+	"onboarding": false,
+	"configMigration": true,
+	"platform": "github",
+	"includeForks": false,
+	"repositories": [
+		"mikesplain/docker-transmission-wireguard"
+	],
+	"prHourlyLimit": 20,
+	"dependencyDashboard": true,
+	"dependencyDashboardTitle": "Renovate Dashboard",
+	"commitBody": "Signed-off-by: Mike Splain <mikesplain@users.noreply.github.com>",
+	"suppressNotifications": [
+		"prIgnoreNotification"
+	],
+	"assignees": [
+		"@mikesplain"
+	]
+}

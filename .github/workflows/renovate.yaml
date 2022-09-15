@@ -1,0 +1,63 @@
+name: Renovate
+on:
+  schedule:
+    # At minute 3 past hour 4, 11, 15, and 20.
+    - cron: '3 4,11,15,20 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/renovate*'
+      - '.github/workflows/renovate*'
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/renovate*'
+      - '.github/workflows/renovate*'
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    concurrency: renovate-${{ github.ref }}
+    env:
+      LOG_LEVEL: info
+    steps:
+      - name: Set Log Level
+        run: |
+          if [ -n "$RUNNER_DEBUG" ]; then
+            echo "LOG_LEVEL=debug" >> $GITHUB_ENV
+          fi
+
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1.6.0
+        with:
+          app_id: ${{ secrets.RENOVATE_APP_ID }}
+          private_key: ${{ secrets.RENOVATE_PEM }}
+
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+
+      - name: Validate Renovate JSON
+        run: jq empty .github/renovate.json
+
+      - name: Generate Dry Run
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: jq '.dryRun = "true"' .github/renovate.json > .github/renovate-dry-run.json
+
+      - name: Renovate - Dry Run
+        uses: renovatebot/github-action@v32.195.5
+        if: ${{ github.ref != 'refs/heads/main' }}
+        with:
+          configurationFile: .github/renovate-dry-run.json
+          token: 'x-access-token:${{ steps.generate_token.outputs.token }}'
+        env:
+          LOG_LEVEL: debug
+
+      - name: Renovate
+        uses: renovatebot/github-action@v32.195.5
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          configurationFile: .github/renovate.json
+          token: 'x-access-token:${{ steps.generate_token.outputs.token }}'
+
