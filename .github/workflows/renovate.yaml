@@ -46,7 +46,7 @@ jobs:
         run: jq '.dryRun = "true"' .github/renovate.json > .github/renovate-dry-run.json
 
       - name: Renovate - Dry Run
-        uses: renovatebot/github-action@v34.19.0
+        uses: renovatebot/github-action@v34.39.3
         if: ${{ github.ref != 'refs/heads/main' }}
         with:
           configurationFile: .github/renovate-dry-run.json
@@ -55,7 +55,7 @@ jobs:
           LOG_LEVEL: debug
 
       - name: Renovate
-        uses: renovatebot/github-action@v34.19.0
+        uses: renovatebot/github-action@v34.39.3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           configurationFile: .github/renovate.json
