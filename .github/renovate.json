@@ -6,7 +6,7 @@
 	"onboarding": false,
 	"configMigration": true,
 	"platform": "github",
-	"includeForks": true,
+	"forkProcessing": "enabled",
 	"repositories": [
 		"mikesplain/docker-transmission-wireguard"
 	],
